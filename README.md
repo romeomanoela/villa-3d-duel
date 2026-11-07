@@ -18,13 +18,16 @@ Trois modèles Claude ont reçu le même cahier des charges : une villa de luxe 
 |---|---|---|---|
 | Durée totale | 70 min 27 s | 65 min 43 s | 42 min 45 s |
 | Tokens consommés | 386 k | 672 k | 551 k (deux passes) |
+| Coût API (USD) | 16,83 $ | 19,59 $ | 20,71 $ |
 | Lignes de code | 3 459 | 5 376 | 2 412 |
 | Erreurs console | 0 | 0 | 0 |
 | Aide extérieure | conseil de découpage du code | aucune | aucune |
 
 Le détail des notes, les points forts, les défauts et le verdict sont sur la page d'accueil (`index.html`). Le cahier des charges complet, avec l'avenant sur la visite intérieure, est dans [`CAHIER_DES_CHARGES.md`](CAHIER_DES_CHARGES.md).
 
-L'arbitre de ce comparatif est lui-même Opus 5.5 : les notes de goût sont subjectives. Ouvrez les trois projets pour vous faire votre propre avis.
+Le coût API est calculé sur l'usage réel de chaque agent (entrées, cache, sorties) aux tarifs publics : Opus 5.5 4 $ / 20 $ par million de tokens, Sonnet 5.5 2 $ / 10 $, Fable 5.1 10 $ / 50 $. Il inclut les 22 minutes perdues par Opus et les deux passes de Fable, mais pas le coût de l'arbitrage.
+
+L'arbitre de ce comparatif est Opus 5.5 en effort Max, lui-même de la famille Opus : les notes de goût sont subjectives. Ouvrez les trois projets pour vous faire votre propre avis.
 
 ## Lancer en local
 
