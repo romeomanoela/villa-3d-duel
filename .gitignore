@@ -1,0 +1,5 @@
+.DS_Store
+.impeccable/
+.claude/settings.local.json
+# Version de la landing adaptée au format Artifact de claude.ai
+villa-duel.html

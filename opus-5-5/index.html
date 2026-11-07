@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Villa Azur — scène 3D interactive</title>
+  <meta name="description" content="Villa contemporaine méditerranéenne en Three.js : piscine, garage animé, cycle jour / nuit.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app" aria-label="Scène 3D de la villa"></div>
+
+  <div id="loader" role="status">
+    <div class="loader-card">
+      <div class="loader-bar"><span></span></div>
+      <p>Construction de la villa…</p>
+    </div>
+  </div>
+
+  <aside id="panel" class="panel" aria-label="Commandes de la scène">
+    <header class="panel-head">
+      <div>
+        <p class="eyebrow">Contemporaine méditerranéenne</p>
+        <h1>Villa Azur</h1>
+      </div>
+      <button id="btn-collapse" class="icon-btn" aria-expanded="true" aria-controls="panel-body" title="Replier le panneau">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </header>
+
+    <div id="panel-body" class="panel-body">
+      <section>
+        <h2>Ambiance</h2>
+        <div class="seg" role="group" aria-label="Moment de la journée">
+          <button id="btn-day" class="on" aria-pressed="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
+            Jour
+          </button>
+          <button id="btn-night" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+            Nuit
+          </button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Garage</h2>
+        <button id="btn-garage" class="wide" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M3 10l9-6 9 6v10H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 20v-7h10v7M7 16h10" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          <span id="garage-label">Ouvrir le garage</span>
+        </button>
+      </section>
+
+      <section>
+        <h2>Vues</h2>
+        <div class="grid4" role="group" aria-label="Vues prédéfinies">
+          <button data-view="facade">Façade</button>
+          <button data-view="pool">Piscine</button>
+          <button data-view="garage">Garage</button>
+          <button data-view="aerial">Aérienne</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Visite</h2>
+        <button id="btn-tour" class="wide" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="5" r="2.2" fill="currentColor"/><path d="M12 8.5v6m0 0l-3 6m3-6l3 6M7.5 11.5l4.5-3 4.5 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="tour-label">Visiter l'intérieur</span>
+        </button>
+      </section>
+
+      <section>
+        <h2>Caméra</h2>
+        <button id="btn-rotate" class="wide toggle" aria-pressed="false">
+          <span>Rotation automatique</span>
+          <span class="switch" aria-hidden="true"><i></i></span>
+        </button>
+      </section>
+
+      <p class="hint">Glisser pour orbiter · molette ou pincement pour zoomer · clic droit pour déplacer.<br>
+        Raccourcis : <kbd>N</kbd> jour/nuit · <kbd>G</kbd> garage · <kbd>1</kbd>–<kbd>4</kbd> vues · <kbd>R</kbd> rotation</p>
+    </div>
+  </aside>
+
+  <div id="tour-hud" class="tour-hud" hidden>
+    <p id="tour-room" class="tour-room">Séjour</p>
+    <p class="tour-help tour-help-desk">
+      <span><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches : se déplacer</span>
+      <span><kbd>Maj</kbd> : courir</span>
+      <span>Glisser la souris : regarder (double-clic : verrouiller)</span>
+      <span><kbd>Échap</kbd> : vue extérieure</span>
+    </p>
+    <p class="tour-help tour-help-touch"><span>Joystick : se déplacer</span><span>Glisser l'écran : regarder</span></p>
+    <div class="tour-actions">
+      <button data-tp="rdc">Rez-de-chaussée</button>
+      <button data-tp="etage">Étage</button>
+      <button id="btn-exit-tour" class="on">Vue extérieure</button>
+    </div>
+  </div>
+  <div id="joystick" class="joystick" hidden aria-hidden="true"><i></i></div>
+  <div id="fade" aria-hidden="true"></div>
+
+  <div id="badge">Opus 5.5 · effort xhigh</div>
+  <div id="fps" aria-hidden="true"></div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

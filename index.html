@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Villa 3D, le duel</title>
+<meta name="description" content="Trois modèles Claude, un même cahier des charges : une villa de luxe en 3D avec piscine, garage et visite intérieure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #12110f;
+  --bg-raised: #1b1a17;
+  --bg-sunk: #0d0c0b;
+  --line: #2e2b26;
+  --text: #ece6da;
+  --text-soft: #b5ac9c;
+  --text-faint: #8f8676;
+  --gold: #d2b072;
+  --gold-ink: #1a140a;
+  --good: #8fbf8a;
+  --warn: #d9a25a;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Manrope", system-ui, sans-serif;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f2ea; --bg-raised: #fffdf8; --bg-sunk: #ece6da; --line: #ddd4c4;
+    --text: #1d1a15; --text-soft: #4d463b; --text-faint: #6b6355;
+    --gold: #8a6420; --gold-ink: #fffdf8; --good: #3f7a3a; --warn: #9a5f12;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f6f2ea; --bg-raised: #fffdf8; --bg-sunk: #ece6da; --line: #ddd4c4;
+  --text: #1d1a15; --text-soft: #4d463b; --text-faint: #6b6355;
+  --gold: #8a6420; --gold-ink: #fffdf8; --good: #3f7a3a; --warn: #9a5f12;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 16px/1.6 var(--sans);
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+.wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+
+/* Hero */
+.hero { padding: 72px 0 48px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin: 0 0 16px; }
+h1 { font: 300 clamp(40px, 7vw, 84px)/1.02 var(--serif); margin: 0 0 24px; letter-spacing: -.01em; }
+h1 em { font-style: italic; font-weight: 500; color: var(--gold); }
+.lede { max-width: 62ch; font-size: 18px; color: var(--text-soft); margin: 0 0 28px; }
+.hero-links { display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 15px; }
+.hero-links a { color: var(--text); text-decoration-color: var(--gold); text-underline-offset: 4px; }
+
+/* Cards */
+section { padding: 64px 0; }
+h2 { font: 400 clamp(28px, 4vw, 40px)/1.15 var(--serif); margin: 0 0 8px; }
+.section-intro { color: var(--text-soft); max-width: 64ch; margin: 0 0 36px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.card {
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.card.winner { border-color: var(--gold); }
+.shot { position: relative; aspect-ratio: 16 / 10; background: var(--bg-sunk); overflow: hidden; }
+.shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; transition: opacity .5s ease; }
+.shot img.night { opacity: 0; }
+.card:hover .shot img.night, .card:focus-within .shot img.night { opacity: 1; }
+.shot-hint { position: absolute; left: 12px; bottom: 12px; font-size: 12px; font-weight: 600; background: rgba(13,12,11,.78); color: #ece6da; padding: 4px 10px; border-radius: 999px; }
+.ribbon { position: absolute; top: 12px; right: 12px; font-size: 12px; font-weight: 700; background: var(--gold); color: var(--gold-ink); padding: 4px 10px; border-radius: 999px; }
+.card-body { padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.model { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.model h3 { font: 500 26px/1.1 var(--serif); margin: 0; }
+.score { font: 600 30px/1 var(--serif); color: var(--gold); white-space: nowrap; }
+.score small { font: 500 14px var(--sans); color: var(--text-faint); }
+.meta { font-size: 14px; color: var(--text-soft); margin: 0; }
+.villa-name { font-style: italic; font-family: var(--serif); font-size: 18px; color: var(--text); margin: 0; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 0; font-size: 14px; }
+.facts dt { color: var(--text-faint); }
+.facts dd { margin: 0; font-weight: 600; }
+.pros, .cons { margin: 0; padding-left: 18px; font-size: 14.5px; color: var(--text-soft); }
+.pros li::marker { color: var(--good); }
+.cons li::marker { color: var(--warn); }
+.cta {
+  margin-top: auto; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+  min-height: 46px; padding: 0 20px; border-radius: 10px; font-weight: 700; font-size: 15px;
+  text-decoration: none; background: var(--gold); color: var(--gold-ink);
+}
+.cta:hover { filter: brightness(1.08); }
+.cta:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+/* Interior gallery */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.gallery figure { margin: 0; }
+.gallery img { border-radius: 10px; aspect-ratio: 16 / 10; object-fit: cover; width: 100%; border: 1px solid var(--line); }
+.gallery figcaption { font-size: 14px; color: var(--text-soft); margin-top: 8px; }
+
+/* Table */
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-raised); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { padding: 13px 18px; text-align: left; border-bottom: 1px solid var(--line); }
+thead th { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; }
+tbody th { font-weight: 500; color: var(--text-soft); }
+td { font-variant-numeric: tabular-nums; }
+td.best { color: var(--gold); font-weight: 700; }
+tr.total th, tr.total td { font-size: 17px; font-weight: 700; color: var(--text); border-bottom: 0; }
+tr.group th { padding-top: 22px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); }
+.note { font-size: 14px; color: var(--text-faint); margin: 14px 0 0; }
+
+/* Verdict */
+.verdict { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.verdict article { border-top: 1px solid var(--gold); padding-top: 18px; }
+.verdict h3 { font: 500 22px/1.2 var(--serif); margin: 0 0 8px; }
+.verdict p { margin: 0; color: var(--text-soft); font-size: 15.5px; }
+.disclosure { margin-top: 40px; padding: 20px 22px; background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius); color: var(--text-soft); font-size: 15px; }
+.disclosure strong { color: var(--text); }
+footer { padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--text-faint); font-size: 14px; }
+
+@media (max-width: 760px) {
+  .hero { padding: 48px 0 36px; }
+  section { padding: 48px 0; }
+  .gallery { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .shot img { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Banc d'essai · 7 novembre 2026</p>
+    <h1>Villa 3D,<br><em>le duel</em> des modèles</h1>
+    <p class="lede">Trois modèles Claude ont reçu le même cahier des charges : une villa de luxe navigable en 3D dans le navigateur, avec piscine, garage, deux voitures, des modes jour et nuit et une visite intérieure à la première personne. Chacun a travaillé seul, dans son dossier, sans voir les autres.</p>
+    <div class="hero-links">
+      <a href="cahier-des-charges.html">Lire le cahier des charges</a>
+      <a href="#comparatif">Voir le comparatif</a>
+      <a href="#verdict">Aller au verdict</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="projets">
+  <div class="wrap">
+    <h2>Les trois projets</h2>
+    <p class="section-intro">Survolez une image pour passer de nuit. Chaque projet s'ouvre dans le navigateur : orbite à la souris, boutons jour et nuit, garage, vues prédéfinies, puis « Visiter l'intérieur ».</p>
+
+    <div class="cards">
+      <article class="card winner">
+        <div class="shot">
+          <img src="assets/opus-5-5-jour.jpg" alt="Villa Azur d'Opus 5.5 de jour : façade blanche et cèdre, garage double" loading="lazy">
+          <img class="night" src="assets/opus-5-5-garage.jpg" alt="Villa Azur de nuit, garage ouvert, phares allumés sur l'allée" loading="lazy">
+          <span class="ribbon">Meilleure note</span>
+          <span class="shot-hint">Survol : nuit</span>
+        </div>
+        <div class="card-body">
+          <div class="model"><h3>Opus 5.5</h3><span class="score">92<small> / 100</small></span></div>
+          <p class="meta">Effort xhigh (Extra)</p>
+          <p class="villa-name">Villa Azur, contemporaine méditerranéenne</p>
+          <dl class="facts">
+            <dt>Durée</dt><dd>70 min</dd>
+            <dt>Tokens</dt><dd>386 k</dd>
+            <dt>Code</dt><dd>3 459 lignes</dd>
+            <dt>Erreurs console</dt><dd>0</dd>
+          </dl>
+          <ul class="pros">
+            <li>Architecture la plus crédible : socle travertin, bardage cèdre, appliques</li>
+            <li>Garage de nuit spectaculaire, phares sur l'allée</li>
+            <li>Visite : boutons Rez-de-chaussée / Étage, nom de la pièce affiché</li>
+          </ul>
+          <ul class="cons">
+            <li>A perdu 22 min et a eu besoin d'un conseil pour découper son code</li>
+            <li>Textes d'interface trop petits par endroits</li>
+          </ul>
+          <a class="cta" href="opus-5-5/index.html">Ouvrir le projet →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="shot">
+          <img src="assets/sonnet-5-5-jour.jpg" alt="Villa Solène de Sonnet 5.5 vue d'en haut : domaine avec vignes, piscine et route" loading="lazy">
+          <img class="night" src="assets/sonnet-5-5-garage.jpg" alt="Villa Solène de nuit, terrasse avec pergola et voiture visible derrière une fenêtre du garage" loading="lazy">
+          <span class="shot-hint">Survol : nuit</span>
+        </div>
+        <div class="card-body">
+          <div class="model"><h3>Sonnet 5.5</h3><span class="score">88<small> / 100</small></span></div>
+          <p class="meta">Effort xhigh (Extra)</p>
+          <p class="villa-name">Villa Solène, Riviera contemporaine</p>
+          <dl class="facts">
+            <dt>Durée</dt><dd>66 min</dd>
+            <dt>Tokens</dt><dd>672 k</dd>
+            <dt>Code</dt><dd>5 376 lignes</dd>
+            <dt>Erreurs console</dt><dd>0</dd>
+          </dl>
+          <ul class="pros">
+            <li>Scène la plus riche : vignes, route, pergola, toit-terrasse, 690 m²</li>
+            <li>Visite la plus étendue : loggia et terrasses accessibles</li>
+            <li>Interface la plus soignée (typo serif, raccourcis affichés)</li>
+          </ul>
+          <ul class="cons">
+            <li>La vue « Garage » ne cadre pas la porte du garage</li>
+            <li>Scène lourde (385 k triangles), 50 fps non confirmés</li>
+          </ul>
+          <a class="cta" href="sonnet-5-5/index.html">Ouvrir le projet →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="shot">
+          <img src="assets/fable-5-1-jour.jpg" alt="Villa Horizon de Fable 5.1 de jour : volumes blancs, bois et palmiers" loading="lazy">
+          <img class="night" src="assets/fable-5-1-garage.jpg" alt="Villa Horizon de nuit, garage ouvert et intérieur éclairé" loading="lazy">
+          <span class="shot-hint">Survol : nuit</span>
+        </div>
+        <div class="card-body">
+          <div class="model"><h3>Fable 5.1</h3><span class="score">83<small> / 100</small></span></div>
+          <p class="meta">Effort high (Élevé)</p>
+          <p class="villa-name">Villa Horizon, contemporaine méditerranéenne</p>
+          <dl class="facts">
+            <dt>Durée</dt><dd>43 min</dd>
+            <dt>Tokens</dt><dd>551 k*</dd>
+            <dt>Code</dt><dd>2 412 lignes</dd>
+            <dt>Erreurs console</dt><dd>0</dd>
+          </dl>
+          <ul class="pros">
+            <li>Le plus rapide, et le premier à rendre un projet complet</li>
+            <li>Code le plus compact, le moins de défauts d'interface</li>
+            <li>Très belle vue de nuit sur la piscine depuis le séjour</li>
+          </ul>
+          <ul class="cons">
+            <li>Mobilier et arbres très géométriques</li>
+            <li>Étoiles noires à travers les vitres, plafond verdâtre de jour</li>
+          </ul>
+          <a class="cta" href="fable-5-1/index.html">Ouvrir le projet →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="interieurs" style="background: var(--bg-sunk);">
+  <div class="wrap">
+    <h2>Visite intérieure</h2>
+    <p class="section-intro">Ajoutée par un avenant en cours de projet, à l'identique pour les trois : vue à la première personne, collisions, escalier et commandes tactiles.</p>
+    <div class="gallery">
+      <figure><img src="assets/opus-5-5-interieur-jour.jpg" alt="Salle à manger d'Opus 5.5 avec vue sur la piscine" loading="lazy"><figcaption>Opus 5.5 : salle à manger, suspensions cuivrées</figcaption></figure>
+      <figure><img src="assets/sonnet-5-5-interieur-jour.jpg" alt="Cuisine et escalier suspendu de Sonnet 5.5" loading="lazy"><figcaption>Sonnet 5.5 : cuisine à îlot et escalier suspendu</figcaption></figure>
+      <figure><img src="assets/fable-5-1-interieur-nuit.jpg" alt="Séjour de Fable 5.1 la nuit face à la piscine éclairée" loading="lazy"><figcaption>Fable 5.1 : séjour de nuit face à la piscine</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="comparatif">
+  <div class="wrap">
+    <h2>Le comparatif</h2>
+    <p class="section-intro">Notes attribuées selon la grille du cahier des charges, à partir des captures, de tests dans le navigateur et de la lecture du code. Le meilleur de chaque ligne est en doré.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Critère</th><th scope="col">Opus 5.5</th><th scope="col">Sonnet 5.5</th><th scope="col">Fable 5.1</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Conformité (30)</th><td class="best">29</td><td>28</td><td class="best">29</td></tr>
+          <tr><th scope="row">Qualité visuelle (25)</th><td class="best">23</td><td class="best">23</td><td>18</td></tr>
+          <tr><th scope="row">Réalisme et détail (15)</th><td class="best">13</td><td class="best">13</td><td>10</td></tr>
+          <tr><th scope="row">Interactivité et UX (15)</th><td class="best">13</td><td class="best">13</td><td>12</td></tr>
+          <tr><th scope="row">Qualité du code (10)</th><td class="best">9</td><td>8</td><td class="best">9</td></tr>
+          <tr><th scope="row">Performance (5)</th><td class="best">5</td><td>3</td><td class="best">5</td></tr>
+          <tr class="total"><th scope="row">Total</th><td class="best">92</td><td>88</td><td>83</td></tr>
+          <tr class="group"><th scope="row" colspan="4">Mesures</th></tr>
+          <tr><th scope="row">Durée totale</th><td>70 min 27 s</td><td>65 min 43 s</td><td class="best">42 min 45 s</td></tr>
+          <tr><th scope="row">Tokens consommés</th><td class="best">386 k</td><td>672 k</td><td>551 k*</td></tr>
+          <tr><th scope="row">Appels d'outils</th><td>145</td><td>186</td><td class="best">91</td></tr>
+          <tr><th scope="row">Lignes de code</th><td>3 459</td><td>5 376</td><td>2 412</td></tr>
+          <tr><th scope="row">Fichiers</th><td>24</td><td>23</td><td>17</td></tr>
+          <tr><th scope="row">Erreurs console</th><td class="best">0</td><td class="best">0</td><td class="best">0</td></tr>
+          <tr><th scope="row">Alertes du contrôle de design</th><td>9</td><td>7</td><td class="best">2</td></tr>
+          <tr><th scope="row">Aide extérieure reçue</th><td>Oui, conseil de découpage</td><td class="best">Non</td><td class="best">Non</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">* Fable avait terminé avant l'avenant : il a été relancé pour la visite intérieure. Ses chiffres additionnent les deux passes (1 960 s + 605 s ; 242 k + 309 k tokens), et la relance recharge tout le contexte, ce qui gonfle le compte de tokens. Sonnet et Opus ont reçu l'avenant en cours de route.</p>
+  </div>
+</section>
+
+<section id="verdict" style="background: var(--bg-sunk);">
+  <div class="wrap">
+    <h2>Verdict</h2>
+    <p class="section-intro">Les trois ont livré un projet complet et sans erreur. L'écart se joue sur le goût, le niveau de détail et l'efficacité.</p>
+    <div class="verdict">
+      <article>
+        <h3>Opus 5.5 : la plus belle maison</h3>
+        <p>Le rendu le plus architectural et la nuit la plus cinématographique. Mais il a démarré par une erreur coûteuse (tout générer d'un coup) et n'a rattrapé son retard qu'avec un conseil. À choisir pour la qualité finale, pas pour la vitesse.</p>
+      </article>
+      <article>
+        <h3>Sonnet 5.5 : le plus ambitieux</h3>
+        <p>Il a construit tout un domaine, avec la visite la plus étendue et l'interface la plus léchée. C'est aussi le plus gourmand en tokens et en ressources graphiques. À choisir quand on veut de la richesse et qu'on accepte d'optimiser ensuite.</p>
+      </article>
+      <article>
+        <h3>Fable 5.1 : le meilleur rapport qualité / temps</h3>
+        <p>Projet propre, robuste et livré bien avant les autres, avec le code le plus sobre. Le rendu est plus simple et plus géométrique. À choisir pour itérer vite ou poser une base solide.</p>
+      </article>
+    </div>
+    <p class="disclosure"><strong>À savoir :</strong> l'arbitre de ce comparatif est lui-même Opus 5.5. Les notes de goût sont forcément subjectives : ouvrez les trois projets et faites-vous votre propre avis. Les captures ont été prises en rendu logiciel : certaines vues de nuit montrent encore la fin du crépuscule.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Three.js 0.160 · géométrie 100 % procédurale · servi en local avec <code>python3 -m http.server 8080</code></div>
+</footer>
+
+</body>
+</html>

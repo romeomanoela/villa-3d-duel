@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<title>Villa Solène — scène 3D interactive</title>
+<meta name="description" content="Villa contemporaine de luxe avec piscine et garage, scène 3D procédurale (Three.js 0.160).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1116'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)' fill='none' stroke='%23d9b878' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/tour.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="scene" aria-label="Scène 3D de la villa" tabindex="0"></canvas>
+
+<div id="loader" role="status" aria-live="polite">
+  <div class="loader-inner">
+    <div class="loader-mark" aria-hidden="true"></div>
+    <h1>Villa Solène</h1>
+    <p id="loader-text">Préparation de la scène…</p>
+    <div class="loader-bar"><i id="loader-fill"></i></div>
+  </div>
+</div>
+
+<aside id="panel" class="panel" aria-label="Commandes de la scène">
+  <header class="panel-head">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <h2>Villa Solène</h2>
+        <p>Résidence contemporaine · piscine &amp; garage</p>
+      </div>
+    </div>
+    <button id="panel-toggle" class="icon-btn" type="button" aria-expanded="true" aria-controls="panel-body" title="Réduire le panneau">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 14l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </header>
+
+  <div id="panel-body" class="panel-body">
+    <section class="group" aria-labelledby="g-ambiance">
+      <h3 id="g-ambiance">Ambiance</h3>
+      <div class="segmented" role="group" aria-label="Moment de la journée">
+        <button id="btn-day" type="button" class="seg is-active" aria-pressed="true" data-key="J">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7"/></g></svg>
+          <span>Jour</span>
+        </button>
+        <button id="btn-night" type="button" class="seg" aria-pressed="false" data-key="N">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8a8.6 8.6 0 1 0 10.8 10.8z" fill="currentColor"/></svg>
+          <span>Nuit</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="group" aria-labelledby="g-garage">
+      <h3 id="g-garage">Garage</h3>
+      <button id="btn-garage" type="button" class="wide" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 10.5L12 4l9 6.5V20H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 20v-7h10v7M7 15.5h10M7 18h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span id="garage-label">Ouvrir le garage</span>
+        <kbd>G</kbd>
+      </button>
+    </section>
+
+    <section class="group" aria-labelledby="g-tour">
+      <h3 id="g-tour">Visite</h3>
+      <button id="btn-tour" type="button" class="wide" aria-pressed="false">
+        <svg class="tour-ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="6.2" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 9.6v5.2M12 11.4l-3.4 2.2M12 11.4l3.4 2.2M12 14.8l-2.6 5.4M12 14.8l2.6 5.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="tour-label">Visiter l’intérieur</span>
+        <kbd>V</kbd>
+      </button>
+    </section>
+
+    <section class="group" aria-labelledby="g-views">
+      <h3 id="g-views">Vues</h3>
+      <div class="grid2" role="group" aria-label="Vues prédéfinies">
+        <button type="button" class="view-btn" data-view="facade"><span>Façade</span><kbd>1</kbd></button>
+        <button type="button" class="view-btn" data-view="piscine"><span>Piscine</span><kbd>2</kbd></button>
+        <button type="button" class="view-btn" data-view="garage"><span>Garage</span><kbd>3</kbd></button>
+        <button type="button" class="view-btn" data-view="aerienne"><span>Aérienne</span><kbd>4</kbd></button>
+      </div>
+    </section>
+
+    <section class="group" aria-labelledby="g-cam">
+      <h3 id="g-cam">Caméra</h3>
+      <button id="btn-rotate" type="button" class="wide switch" role="switch" aria-checked="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20.5 3.5v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Rotation automatique</span>
+        <i class="knob" aria-hidden="true"></i>
+        <kbd>R</kbd>
+      </button>
+    </section>
+
+    <p class="hint">Glisser : orbite · Molette : zoom · Clic droit : déplacer</p>
+  </div>
+</aside>
+
+<div class="badge" title="Modèle et niveau d'effort">Sonnet 5.5 · effort xhigh</div>
+<div id="status" class="status" aria-live="polite"></div>
+<noscript><p style="position:fixed;inset:auto 16px 16px;color:#fff">JavaScript est requis pour afficher la scène 3D.</p></noscript>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

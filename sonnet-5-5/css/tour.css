@@ -1,0 +1,148 @@
+/* ---------- Visite intérieure : HUD, aide, joystick ---------- */
+#tour-hud {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
+body.is-tour #tour-hud { opacity: 1; visibility: visible; }
+#tour-hud button, #tour-hud .joystick { pointer-events: auto; }
+
+.crosshair {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 5px; height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+body.is-captured .crosshair { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: rgba(217, 184, 120, 0.95); }
+
+.room-label {
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translate(-50%, -8px);
+  padding: 9px 20px;
+  font: 400 15px/1 var(--serif);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(12, 14, 18, 0.55);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+  white-space: nowrap;
+}
+.room-label.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+.tour-exit {
+  position: absolute;
+  top: 16px; right: 16px;
+  display: flex; align-items: center; gap: 8px;
+  height: 40px;
+  padding: 0 12px 0 10px;
+  font: 500 13px/1 var(--sans);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: rgba(12, 14, 18, 0.62);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(217, 184, 120, 0.55);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tour-exit:hover { background: rgba(217, 184, 120, 0.22); }
+.tour-exit svg { color: var(--gold); }
+
+.tour-help {
+  position: absolute;
+  left: 50%; bottom: 20px;
+  transform: translate(-50%, 12px);
+  width: min(470px, calc(100vw - 32px));
+  padding: 14px 18px 12px;
+  color: var(--ink);
+  background: rgba(12, 14, 18, 0.7);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s, transform 0.4s, visibility 0.4s;
+}
+.tour-help.is-on { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.help-title { font: 600 10.5px/1 var(--sans); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.help-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.help-list li { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.help-list em { font-style: normal; color: var(--ink-dim); margin-left: auto; text-align: right; }
+.help-list .keys { display: inline-flex; align-items: center; gap: 3px; }
+.help-list .keys.alt { opacity: 0.8; margin-left: 4px; }
+.help-list kbd { min-width: 22px; height: 22px; font-size: 11px; color: var(--ink); background: rgba(255, 255, 255, 0.08); }
+.help-tip { margin: 10px 0 0; font-size: 11.5px; color: var(--ink-faint); line-height: 1.4; }
+.only-touch { display: none !important; }
+body.has-touch .only-touch { display: grid !important; }
+body.has-touch .only-mouse { display: none !important; }
+
+.tour-help-btn {
+  position: absolute;
+  right: 16px; bottom: 54px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  font: 600 15px/1 var(--sans);
+  color: var(--ink);
+  background: rgba(12, 14, 18, 0.62);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+}
+.tour-help-btn:hover, .tour-help-btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+
+.joystick {
+  position: absolute;
+  left: 22px; bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+  width: 132px; height: 132px;
+  border-radius: 50%;
+  display: none;
+  place-items: center;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 70%);
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  touch-action: none;
+}
+body.has-touch .joystick { display: grid; }
+.joy-knob {
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: rgba(217, 184, 120, 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+/* Pendant la visite, le panneau garde jour/nuit et garage ; les vues orbitales sont grisées */
+body.is-tour .view-btn, body.is-tour #btn-rotate { opacity: 0.55; }
+
+#btn-tour .tour-ico { color: var(--gold); flex: none; }
+#btn-tour[aria-pressed="true"] { border-color: rgba(217, 184, 120, 0.6); background: var(--gold-soft); }
+
+@media (max-width: 640px) {
+  .tour-exit { top: 10px; right: auto; left: 10px; height: 36px; font-size: 12.5px; }
+  .tour-exit kbd { display: none; }
+  .tour-help kbd { display: inline-grid; }
+  .room-label { top: 56px; font-size: 13px; padding: 8px 16px; letter-spacing: 0.12em; }
+  .joystick { left: 16px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: 124px; height: 124px; }
+  .tour-help { bottom: 214px; }
+  .tour-help-btn { bottom: 84px; right: 14px; }
+}
+@media (max-width: 640px) and (max-height: 520px) {
+  .tour-help { bottom: 12px; width: min(380px, 60vw); left: auto; right: 12px; transform: translateY(12px); }
+  .tour-help.is-on { transform: translateY(0); }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Villa Horizon — scène 3D interactive</title>
+  <meta name="description" content="Villa de luxe contemporaine avec piscine et garage, scène Three.js 100 % procédurale.">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="Scène 3D de la villa"></canvas>
+
+  <div id="loader" aria-live="polite">
+    <div class="loader-card">
+      <span class="loader-dot"></span>
+      <span>Construction de la villa…</span>
+    </div>
+  </div>
+
+  <aside id="ui" class="panel" aria-label="Commandes de la scène">
+    <header class="panel-head">
+      <div>
+        <h1>Villa Horizon</h1>
+        <p>Villa contemporaine · piscine · garage</p>
+      </div>
+      <button id="btn-panel-toggle" class="icon-btn" aria-expanded="true" aria-label="Replier le panneau" title="Replier / déplier">
+        <span class="chev"></span>
+      </button>
+    </header>
+
+    <div class="panel-body">
+      <section class="group">
+        <span class="label">Ambiance</span>
+        <div class="seg" role="group" aria-label="Jour ou nuit">
+          <button id="btn-day" class="active" aria-pressed="true"><span class="ico">☀</span> Jour</button>
+          <button id="btn-night" aria-pressed="false"><span class="ico">☾</span> Nuit</button>
+        </div>
+      </section>
+
+      <section class="group">
+        <span class="label">Garage</span>
+        <button id="btn-garage" class="wide" aria-pressed="false">Ouvrir le garage</button>
+      </section>
+
+      <section class="group">
+        <span class="label">Vues</span>
+        <div class="grid2" role="group" aria-label="Vues prédéfinies">
+          <button data-view="facade" class="active">Façade</button>
+          <button data-view="pool">Piscine</button>
+          <button data-view="garage">Garage</button>
+          <button data-view="aerial">Aérienne</button>
+        </div>
+      </section>
+
+      <section class="group">
+        <span class="label">Caméra</span>
+        <button id="btn-rotate" class="wide" aria-pressed="false">Rotation auto : off</button>
+        <button id="btn-visit" class="wide visit">Visiter l'intérieur</button>
+      </section>
+
+      <p class="hint">Glisser : orbiter · molette : zoom · clic droit : déplacer<br>Raccourcis : N nuit · G garage · R rotation · V visite · 1–4 vues</p>
+    </div>
+  </aside>
+
+  <div id="walk-help" aria-live="polite">
+    <span class="help-desktop"><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / flèches : se déplacer · souris : regarder · <kbd>Maj</kbd> : courir · <kbd>Échap</kbd> : vue extérieure</span>
+    <span class="help-touch">Joystick : se déplacer · glisser sur la scène : regarder · « Vue extérieure » pour sortir</span>
+  </div>
+
+  <div id="touch-ui" aria-label="Commandes tactiles">
+    <div id="joystick" aria-label="Joystick de déplacement"><div class="knob"></div></div>
+    <button id="btn-run" aria-pressed="false">Courir</button>
+    <button id="btn-exit-touch">Vue extérieure</button>
+  </div>
+
+  <div id="badge" aria-label="Modèle">
+    <span class="badge-name">Fable 5.1 · effort high</span>
+    <span id="fps" class="badge-fps"></span>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

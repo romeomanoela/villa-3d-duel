@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cahier des charges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #12110f; --raised: #1b1a17; --line: #2e2b26; --text: #ece6da; --soft: #b5ac9c; --gold: #d2b072; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #f6f2ea; --raised: #fffdf8; --line: #ddd4c4; --text: #1d1a15; --soft: #4d463b; --gold: #8a6420; } }
+:root[data-theme="light"] { --bg: #f6f2ea; --raised: #fffdf8; --line: #ddd4c4; --text: #1d1a15; --soft: #4d463b; --gold: #8a6420; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.65 "Manrope", system-ui, sans-serif; }
+main { width: min(820px, 100% - 32px); margin: 0 auto; padding: 40px 0 72px; }
+.back { color: var(--gold); font-weight: 600; text-decoration: none; }
+h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 400; line-height: 1.15; }
+h1 { font-size: clamp(32px, 6vw, 48px); margin: 28px 0 20px; }
+h2 { font-size: 26px; margin: 40px 0 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+p, li { color: var(--soft); }
+strong { color: var(--text); }
+code { font-size: .92em; background: var(--raised); padding: 1px 6px; border-radius: 5px; }
+.t { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { color: var(--gold); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="./" onclick="if (history.length > 1) { history.back(); return false; }">← Retour au comparatif</a>
+  <div id="doc"><p>Chargement…</p></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+fetch('CAHIER_DES_CHARGES.md')
+  .then(r => r.arrayBuffer())
+  .then(b => {
+    const html = marked.parse(new TextDecoder('utf-8').decode(b));
+    const doc = document.getElementById('doc');
+    doc.innerHTML = html;
+    doc.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 't'; t.before(w); w.append(t); });
+  })
+  .catch(() => { document.getElementById('doc').innerHTML = '<p>Impossible de charger <a href="CAHIER_DES_CHARGES.md">CAHIER_DES_CHARGES.md</a>.</p>'; });
+</script>
+</body>
+</html>
