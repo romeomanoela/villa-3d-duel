@@ -2,6 +2,8 @@
 
 Trois modèles Claude ont reçu le même cahier des charges : une villa de luxe navigable en 3D dans le navigateur, avec piscine, garage, deux voitures, des modes jour et nuit et une visite intérieure à la première personne. Chacun a travaillé seul, dans son dossier, sans voir le travail des autres.
 
+**Voir et jouer en ligne : https://romeomanoela.github.io/villa-3d-duel/**
+
 ![Villa Azur d'Opus 5.5, de nuit, garage ouvert](assets/opus-5-5-garage.jpg)
 
 ## Les projets
